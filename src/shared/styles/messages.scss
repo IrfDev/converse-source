@@ -6,11 +6,12 @@
     .older-msg {
         time {
             font-weight: bold;
+            color: red !important;
         }
     }
     .message {
         .show-msg-author-modal {
-            color: var(--text-color) !important;
+            color: red !important;
         }
 
         blockquote {
@@ -121,7 +122,7 @@
                 background-color: var(--list-item-hover-color);
             }
             &.correcting {
-                &.groupchat  {
+                &.groupchat {
                     background-color: var(--chatroom-correcting-color);
                 }
                 &:not(.groupchat) {
@@ -225,7 +226,7 @@
                     &.emoji {
                         height: 1.5em;
                         width: 1.5em;
-                        margin: 0 .05em 0 .1em;
+                        margin: 0 0.05em 0 0.1em;
                         vertical-align: -0.1em;
                     }
                 }
@@ -287,7 +288,6 @@
                         margin-right: 0.25em;
                     }
 
-
                     &:hover {
                         color: var(--text-color);
                         background-color: var(--list-item-hover-color);
@@ -327,7 +327,7 @@
                 .chat-msg__time {
                     padding-left: 0.25em;
                     padding-right: 0.25em;
-                    color: var(--text-color-lighten-15-percent);
+                    color: red !important;
                 }
             }
             &.chat-msg--action {
@@ -351,6 +351,7 @@
                 }
                 .chat-msg__time {
                     margin-left: 0;
+                    color: blue;
                 }
             }
 
@@ -399,9 +400,8 @@
     }
 }
 
-
 @media screen and (max-width: 767px) {
-    converse-chats:not(.converse-embedded)  {
+    converse-chats:not(.converse-embedded) {
         .message {
             &.chat-msg {
                 .chat-msg__author {

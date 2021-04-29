@@ -1,13 +1,13 @@
-@import "bootstrap/scss/functions";
-@import "bootstrap/scss/variables";
-@import "bootstrap/scss/mixins";
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
 
 #conversejs {
-    @import "bootstrap/scss/modal";
+    @import 'bootstrap/scss/modal';
 
     #converse-modals {
         .modal {
-            background-color: rgba(0, 0, 0, 0.4);
+            background-color: red;
 
             .modal-body {
                 overflow-y: auto;
@@ -54,7 +54,8 @@
             overflow-y: auto;
         }
 
-        .role-form, .affiliation-form {
+        .role-form,
+        .affiliation-form {
             padding: 2em 0 1em 0;
         }
 
@@ -91,8 +92,8 @@
                 justify-content: left;
                 font-size: 95%;
 
-                input[type="checkbox"] {
-                    margin-right: 1em;
+                input[type='checkbox'] {
+                    margin-right: 100em;
                 }
             }
         }

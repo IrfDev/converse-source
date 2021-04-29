@@ -5,6 +5,7 @@
             position: fixed;
             bottom: 0;
             right: 0;
+            background-color: blue;
         }
         &.converse-overlayed {
             height: 3em;
@@ -20,7 +21,9 @@
         }
         &.converse-embedded {
             box-sizing: border-box;
-            *, *:before, *:after {
+            *,
+            *:before,
+            *:after {
                 box-sizing: border-box;
             }
             bottom: auto;
