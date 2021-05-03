@@ -1,42 +1,40 @@
 import { CustomElement } from './element.js';
 import { __ } from 'i18n';
 import { html } from 'lit-element';
-import { renderAvatar } from "shared/directives/avatar.js";
-import { api } from "@converse/headless/core";
+import { renderAvatar } from 'shared/directives/avatar.js';
+import { api } from '@converse/headless/core';
 
 const i18n_alt_avatar = __('Your avatar image');
 
-
 export default class ImagePicker extends CustomElement {
-
-    static get properties () {
+    static get properties() {
         return {
             'height': { type: Number },
             'image': { type: String },
-            'width': { type: Number },
-        }
+            'width': { type: Number }
+        };
     }
 
-    render () {
+    render() {
         const avatar_data = {
             'height': this.height,
             'image': this.image,
-            'width': this.width,
+            'width': this.width
         };
         return html`
             <a class="change-avatar" @click=${this.openFileSelection} title="${i18n_alt_avatar}">
-                ${ renderAvatar(avatar_data) }
+                ${renderAvatar(avatar_data)}
             </a>
-            <input @change=${this.updateFilePreview} class="hidden" name="image" type="file"/>
+            <input @change=${this.updateFilePreview} class="hidden" name="image" type="file" />
         `;
     }
 
-    openFileSelection (ev) {
+    openFileSelection(ev) {
         ev.preventDefault();
         this.querySelector('input[type="file"]').click();
     }
 
-    updateFilePreview (ev) {
+    updateFilePreview(ev) {
         const file = ev.target.files[0];
         const reader = new FileReader();
         reader.onloadend = () => (this.image = reader.result);

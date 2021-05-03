@@ -1,10 +1,10 @@
-@import "bootstrap/scss/functions";
-@import "bootstrap/scss/variables";
-@import "bootstrap/scss/mixins";
-@import "shared/styles/_variables.scss";
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
+@import 'shared/styles/_variables.scss';
 
 #conversejs {
-    @import "bootstrap/scss/media";
+    @import 'bootstrap/scss/media';
 
     converse-controlbox-navback {
         display: none;
@@ -105,7 +105,10 @@
             padding: 0;
         }
 
-        a, a:visited, a:hover, a:not([href]):not([tabindex]) {
+        a,
+        a:visited,
+        a:hover,
+        a:not([href]):not([tabindex]) {
             &.chatbox-btn {
                 &.fa,
                 &.fas,
@@ -122,7 +125,9 @@
 
         .chatbox-btn {
             color: white;
-            &.fa, &.far, &.fas  {
+            &.fa,
+            &.far,
+            &.fas {
                 color: white;
             }
             &:active {
@@ -191,7 +196,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            background-color: var(--chat-textarea-background-color);
+            background-color: black;
             border-bottom-left-radius: var(--chatbox-border-radius);
             border-bottom-right-radius: var(--chatbox-border-radius);
 
@@ -272,6 +277,7 @@
             }
 
             .chat-content__messages {
+                background-color: black;
                 overflow-x: hidden;
                 overflow-y: auto;
                 height: 100%;
@@ -280,31 +286,34 @@
             .chat-content__notifications {
                 height: 1.7em;
                 white-space: pre;
-                background-color: var(--chat-content-background-color);
+                background-color: black;
                 color: var(--subdued-color);
                 font-size: 90%;
                 font-style: italic;
                 line-height: var(--line-height-small);
                 padding: 0 1em 0.3em;
                 &:before {
-                    content: " ";
+                    content: ' ';
                 }
             }
 
             video {
-                width: 100%
+                width: 100%;
             }
             progress {
                 margin: 0.5em 0;
-                width: 100%
+                width: 100%;
             }
         }
 
         .chat-content-sendbutton {
-            height: calc(100% - (var(--chat-textarea-height) + var(--send-button-height) + 2 * var(--send-button-margin)));
+            height: calc(
+                100% - (var(--chat-textarea-height) + var(--send-button-height) + 2 * var(--send-button-margin))
+            );
         }
 
-        .dropdown { /* status dropdown styles */
+        .dropdown {
+            /* status dropdown styles */
             background-color: var(--light-background-color);
             dd {
                 margin: 0;
@@ -339,8 +348,10 @@
                 width: 100%;
             }
 
-            .chat-textarea, input {
-                &:active, &:focus{
+            .chat-textarea,
+            input {
+                &:active,
+                &:focus {
                     outline-color: var(--chat-head-color);
                 }
                 &.correcting {
@@ -357,7 +368,7 @@
                 padding-left: 0.5em;
                 padding-right: 4.5em;
                 padding-top: 0.5em;
-                padding-bottom:0.5em;
+                padding-bottom: 0.5em;
                 width: 100%;
                 border: none;
                 min-height: var(--chat-textarea-height);
@@ -421,8 +432,9 @@
         }
     }
 
-    converse-chats.converse-overlayed  {
-        .chat-head, .box-flyout {
+    converse-chats.converse-overlayed {
+        .chat-head,
+        .box-flyout {
             border-top-left-radius: var(--chatbox-border-radius);
             border-top-right-radius: var(--chatbox-border-radius);
             @media screen and (max-height: $mobile-landscape-height) {
@@ -482,13 +494,12 @@
     }
 }
 
-
 #conversejs {
     converse-chats.converse-embedded,
-    converse-chats.converse-fullscreen  {
+    converse-chats.converse-fullscreen {
         .flyout {
             border-radius: 0;
-            border:none;
+            border: none;
             bottom: 0;
         }
 
@@ -569,7 +580,7 @@
 /* ******************* Fullpage styles *************************** */
 
 #conversejs {
-    converse-chats.converse-fullscreen  {
+    converse-chats.converse-fullscreen {
         .chatbox-btn {
             font-size: var(--fullpage-chatbox-button-size);
             margin: 0 0.3em;
@@ -591,7 +602,7 @@
             .chat-body {
                 height: inherit;
                 overflow: hidden;
-                background-color: var(--chat-background-color);
+                background-color: black;
             }
             .chat-title {
                 font-size: var(--font-size-huge);
@@ -606,10 +617,9 @@
     }
 }
 
-
 @include media-breakpoint-down(sm) {
     #conversejs {
-        converse-chats:not(.converse-embedded)  {
+        converse-chats:not(.converse-embedded) {
             > .row {
                 flex-direction: row-reverse;
             }

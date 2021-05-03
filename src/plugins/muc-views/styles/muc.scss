@@ -1,8 +1,7 @@
-@import "bootstrap/scss/functions";
-@import "bootstrap/scss/variables";
-@import "bootstrap/scss/mixins";
-@import "shared/styles/_variables.scss";
-
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
+@import 'shared/styles/_variables.scss';
 
 converse-muc-config-form {
     width: 100%;
@@ -23,8 +22,8 @@ converse-muc-destroyed {
     }
 
     .add-chatroom {
-        input[type="submit"],
-        input[type="button"] {
+        input[type='submit'],
+        input[type='button'] {
             margin: 0.3em 0;
         }
     }
@@ -53,7 +52,6 @@ converse-muc-destroyed {
         }
     }
 
-
     .chat-head-chatroom {
         color: var(--chatroom-head-color);
         background-color: var(--chatroom-head-bg-color);
@@ -73,6 +71,7 @@ converse-muc-destroyed {
         }
 
         .chatbox-title {
+            background-color: #444444;
             .btn--transparent {
                 i {
                     color: var(--chatroom-head-color);
@@ -88,7 +87,10 @@ converse-muc-destroyed {
             background-color: var(--chatroom-head-bg-color);
         }
 
-        a, a:visited, a:hover, a:not([href]):not([tabindex]) {
+        a,
+        a:visited,
+        a:hover,
+        a:not([href]):not([tabindex]) {
             &.chatbox-btn {
                 &.fa {
                     color: var(--chat-head-text-color);
@@ -105,6 +107,7 @@ converse-muc-destroyed {
             }
         }
         .chatbox-title__text {
+            color: ghostwhite;
             display: var(--heading-display);
             font-weight: var(--chatroom-head-title-font-weight);
             margin: auto 0;
@@ -128,7 +131,7 @@ converse-muc-destroyed {
 
     .chatroom {
         width: var(--chatroom-width);
-        @media screen and (max-height: $mobile-landscape-height){
+        @media screen and (max-height: $mobile-landscape-height) {
             width: var(--mobile-chat-width);
         }
         @media screen and (max-width: $mobile-portrait-length) {
@@ -190,6 +193,7 @@ converse-muc-destroyed {
                     }
                 }
                 .chat-area {
+                    border-right: 3px solid gray;
                     display: flex;
                     flex-direction: column;
                     flex: 0 1 100%;
@@ -220,7 +224,7 @@ converse-muc-destroyed {
                     overflow-x: hidden;
                     overflow-y: hidden;
                     vertical-align: top;
-                    background-color: var(--occupants-background-color);
+                    background-color: black;
                     border-left: var(--occupants-border-left);
                     padding: 0.5em;
                     max-width: 75%;
@@ -254,7 +258,7 @@ converse-muc-destroyed {
                         padding-left: 0;
                         margin-right: 1em;
                     }
-                    .suggestion-box{
+                    .suggestion-box {
                         ul {
                             padding: 0;
                             li {
@@ -323,7 +327,7 @@ converse-muc-destroyed {
 
                                     &.occupant-online,
                                     &.occupant-chat {
-                                        background-color: #1A9707;
+                                        background-color: #1a9707;
                                     }
                                     &.occupant-dnd {
                                         background-color: red;
@@ -355,8 +359,8 @@ converse-muc-destroyed {
                         font-size: 90%;
                         color: var(--error-color);
                     }
-                    input[type=button],
-                    input[type=submit] {
+                    input[type='button'],
+                    input[type='submit'] {
                         margin: 0 0.5em;
                     }
                     .button-primary {
@@ -382,7 +386,7 @@ converse-muc-destroyed {
             padding: 0.5em;
             text-align: center;
             font-size: var(--font-size-small);
-            background-color: var(--chatroom-head-bg-color);
+            background-color: black;
             color: white;
 
             &.muc-bottom-panel--muted {
@@ -407,8 +411,10 @@ converse-muc-destroyed {
             .suggestion-box__results--above {
                 bottom: 4.5em;
             }
-            .chat-textarea, input {
-                &:active, &:focus{
+            .chat-textarea,
+            input {
+                &:active,
+                &:focus {
                     outline-color: var(--chatroom-head-bg-color);
                 }
                 &.correcting {
@@ -486,7 +492,6 @@ converse-muc-destroyed {
         &.converse-embedded,
         &.converse-fullscreen,
         &.converse-mobile {
-
             .chatroom {
                 .box-flyout {
                     width: 100%;
@@ -561,7 +566,6 @@ converse-muc-destroyed {
         }
     }
 }
-
 
 @include media-breakpoint-down(sm) {
     #conversejs {

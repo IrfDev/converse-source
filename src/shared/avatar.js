@@ -6,8 +6,7 @@ import { converse } from '@converse/headless/core';
 const u = converse.env.utils;
 
 const AvatarMixin = {
-
-    renderAvatar (el) {
+    renderAvatar(el) {
         el = el || (this?.el ?? this);
         const avatar_el = el.querySelector('canvas.avatar, svg.avatar');
         if (avatar_el === null) {
@@ -24,15 +23,12 @@ const AvatarMixin = {
             avatar_el.outerHTML = u.getElementFromTemplateResult(tpl_avatar(data)).outerHTML;
         }
     }
-}
-
+};
 
 export const ViewWithAvatar = View.extend(AvatarMixin);
 
-
 export class ElementViewWithAvatar extends ElementView {
-
-    renderAvatar (el) {
+    renderAvatar(el) {
         AvatarMixin.renderAvatar.call(this, el);
     }
 }

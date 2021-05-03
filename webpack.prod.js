@@ -9,6 +9,7 @@ const { merge } = require('webpack-merge');
 
 const plugins = [
     new MiniCssExtractPlugin({ filename: '../dist/converse.min.css' }),
+
     new CopyWebpackPlugin({
         patterns: [
             { from: 'node_modules/strophe.js/src/shared-connection-worker.js', to: 'shared-connection-worker.js' },
@@ -39,7 +40,8 @@ module.exports = merge(common, {
     module: {
         rules: [
             {
-                test: /\.scss$/,
+                test: /\.(s[ac]ss|css)$/i,
+
                 use: [
                     MiniCssExtractPlugin.loader,
                     {

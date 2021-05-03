@@ -11,24 +11,22 @@ import tpl_message from './templates/message.js';
 import tpl_spinner from 'templates/spinner.js';
 import { CustomElement } from 'shared/components/element.js';
 import { __ } from 'i18n';
-import { _converse, api, converse } from  '@converse/headless/core';
+import { _converse, api, converse } from '@converse/headless/core';
 import { html } from 'lit-element';
 import { renderAvatar } from 'shared/directives/avatar';
 
 const { Strophe } = converse.env;
 const u = converse.env.utils;
 
-
 export default class Message extends CustomElement {
-
-    static get properties () {
+    static get properties() {
         return {
             jid: { type: String },
             mid: { type: String }
-        }
+        };
     }
 
-    render () {
+    render() {
         if (this.show_spinner) {
             return tpl_spinner();
         } else if (this.model.get('file') && !this.model.get('oob_url')) {
@@ -40,7 +38,7 @@ export default class Message extends CustomElement {
         }
     }
 
-    connectedCallback () {
+    connectedCallback() {
         super.connectedCallback();
         this.chatbox = _converse.chatboxes.get(this.jid);
         this.model = this.chatbox.messages.get(this.mid);
@@ -53,72 +51,84 @@ export default class Message extends CustomElement {
                 this.listenTo(this.model.occupant, 'change', () => this.requestUpdate());
             } else {
                 this.listenTo(this.model, 'occupantAdded', () => {
-                    this.listenTo(this.model.occupant, 'change', () => this.requestUpdate())
+                    this.listenTo(this.model.occupant, 'change', () => this.requestUpdate());
                 });
             }
         }
     }
 
-    getProps () {
-        return Object.assign(
-            this.model.toJSON(),
-            this.getDerivedMessageProps()
-        );
+    getProps() {
+        return Object.assign(this.model.toJSON(), this.getDerivedMessageProps());
     }
 
-    renderInfoMessage () {
+    renderInfoMessage() {
         const isodate = dayjs(this.model.get('time')).toISOString();
         const i18n_retry = __('Retry');
         return html`
-            <div class="message chat-info chat-${this.model.get('type')}"
+            <div
+                class="message chat-info chat-${this.model.get('type')}"
                 data-isodate="${isodate}"
                 data-type="${this.data_name}"
-                data-value="${this.data_value}">
-
+                data-value="${this.data_value}"
+            >
                 <div class="chat-info__message">
-                    ${ this.model.getMessageText() }
+                    ${this.model.getMessageText()}
                 </div>
-                ${ this.model.get('reason') ? html`<q class="reason">${this.model.get('reason')}</q>` : `` }
-                ${ this.model.get('error_text') ? html`<q class="reason">${this.model.get('error_text')}</q>` : `` }
-                ${ this.model.get('retry_event_id') ? html`<a class="retry" @click=${this.onRetryClicked}>${i18n_retry}</a>` : '' }
-            </div>`;
+                ${this.model.get('reason')
+                    ? html`
+                          <q class="reason">${this.model.get('reason')}</q>
+                      `
+                    : ``}
+                ${this.model.get('error_text')
+                    ? html`
+                          <q class="reason">${this.model.get('error_text')}</q>
+                      `
+                    : ``}
+                ${this.model.get('retry_event_id')
+                    ? html`
+                          <a class="retry" @click=${this.onRetryClicked}>${i18n_retry}</a>
+                      `
+                    : ''}
+            </div>
+        `;
     }
 
-    renderFileProgress () {
+    renderFileProgress() {
         const i18n_uploading = __('Uploading file:');
         const filename = this.model.file.name;
         const size = filesize(this.model.file.size);
         return html`
             <div class="message chat-msg">
-                ${ renderAvatar(this.getAvatarData()) }
+                ${renderAvatar(this.getAvatarData())}
                 <div class="chat-msg__content">
                     <span class="chat-msg__text">${i18n_uploading} <strong>${filename}</strong>, ${size}</span>
-                    <progress value="${this.model.get('progress')}"/>
+                    <progress value="${this.model.get('progress')}" />
                 </div>
-            </div>`;
+            </div>
+        `;
     }
 
-    renderChatMessage () {
+    renderChatMessage() {
         return tpl_message(this, this.getProps());
     }
 
-    shouldShowAvatar () {
+    shouldShowAvatar() {
         return api.settings.get('show_message_avatar') && !this.model.isMeCommand() && this.type !== 'headline';
     }
 
-    getAvatarData () {
+    getAvatarData() {
         const image_type = this.model.vcard?.get('image_type') || _converse.DEFAULT_IMAGE_TYPE;
         const image_data = this.model.vcard?.get('image') || _converse.DEFAULT_IMAGE;
-        const image = "data:" + image_type + ";base64," + image_data;
+        const image = 'data:' + image_type + ';base64,' + image_data;
         return {
             'classes': 'chat-msg__avatar',
             'height': 36,
             'width': 36,
-            image,
+            image
         };
     }
 
-    onUnfurlAnimationEnd () {
+    onUnfurlAnimationEnd() {
         if (this.model.get('url_preview_transition') === 'fade-out') {
             this.model.save({
                 'hide_url_previews': !this.model.get('hide_url_previews'),
@@ -127,56 +137,58 @@ export default class Message extends CustomElement {
         }
     }
 
-    async onRetryClicked () {
+    async onRetryClicked() {
         this.show_spinner = true;
         this.requestUpdate();
-        await api.trigger(this.model.get('retry_event_id'), {'synchronous': true});
+        await api.trigger(this.model.get('retry_event_id'), { 'synchronous': true });
         this.model.destroy();
         this.parentElement.removeChild(this);
     }
 
-    isFollowup () {
+    isFollowup() {
         const messages = this.model.collection.models;
         const idx = messages.indexOf(this.model);
-        const prev_model = idx ? messages[idx-1] : null;
+        const prev_model = idx ? messages[idx - 1] : null;
         if (prev_model === null) {
             return false;
         }
         const date = dayjs(this.model.get('time'));
-        return this.model.get('from') === prev_model.get('from') &&
+        return (
+            this.model.get('from') === prev_model.get('from') &&
             !this.model.isMeCommand() &&
             !prev_model.isMeCommand() &&
             this.model.get('type') !== 'info' &&
             prev_model.get('type') !== 'info' &&
             date.isBefore(dayjs(prev_model.get('time')).add(10, 'minutes')) &&
-            !!this.model.get('is_encrypted') === !!prev_model.get('is_encrypted');
+            !!this.model.get('is_encrypted') === !!prev_model.get('is_encrypted')
+        );
     }
 
-    isRetracted () {
+    isRetracted() {
         return this.model.get('retracted') || this.model.get('moderated') === 'retracted';
     }
 
-    hasMentions () {
+    hasMentions() {
         const is_groupchat = this.model.get('type') === 'groupchat';
         return is_groupchat && this.model.get('sender') === 'them' && this.chatbox.isUserMentioned(this.model);
     }
 
-    getOccupantAffiliation () {
+    getOccupantAffiliation() {
         return this.model.occupant?.get('affiliation');
     }
 
-    getOccupantRole () {
+    getOccupantRole() {
         return this.model.occupant?.get('role');
     }
 
-    getExtraMessageClasses () {
+    getExtraMessageClasses() {
         const extra_classes = [
             this.isFollowup() ? 'chat-msg--followup' : null,
             this.model.get('is_delayed') ? 'delayed' : null,
             this.model.isMeCommand() ? 'chat-msg--action' : null,
             this.isRetracted() ? 'chat-msg--retracted' : null,
             this.model.get('type'),
-            this.shouldShowAvatar() ? 'chat-msg--with-avatar' : null,
+            this.shouldShowAvatar() ? 'chat-msg--with-avatar' : null
         ].map(c => c);
 
         if (this.model.get('type') === 'groupchat') {
@@ -187,10 +199,10 @@ export default class Message extends CustomElement {
             }
         }
         this.model.get('correcting') && extra_classes.push('correcting');
-        return extra_classes.filter(c => c).join(" ");
+        return extra_classes.filter(c => c).join(' ');
     }
 
-    getDerivedMessageProps () {
+    getDerivedMessageProps() {
         const format = api.settings.get('time_format');
         return {
             'pretty_time': dayjs(this.model.get('edited') || this.model.get('time')).format(format),
@@ -200,18 +212,18 @@ export default class Message extends CustomElement {
             'is_me_message': this.model.isMeCommand(),
             'is_retracted': this.isRetracted(),
             'username': this.model.getDisplayName(),
-            'should_show_avatar': this.shouldShowAvatar(),
-        }
+            'should_show_avatar': this.shouldShowAvatar()
+        };
     }
 
-    getRetractionText () {
+    getRetractionText() {
         if (this.model.get('type') === 'groupchat' && this.model.get('moderated_by')) {
             const retracted_by_mod = this.model.get('moderated_by');
             const chatbox = this.model.collection.chatbox;
             if (!this.model.mod) {
                 this.model.mod =
-                    chatbox.occupants.findOccupant({'jid': retracted_by_mod}) ||
-                    chatbox.occupants.findOccupant({'nick': Strophe.getResourceFromJid(retracted_by_mod)});
+                    chatbox.occupants.findOccupant({ 'jid': retracted_by_mod }) ||
+                    chatbox.occupants.findOccupant({ 'nick': Strophe.getResourceFromJid(retracted_by_mod) });
             }
             const modname = this.model.mod ? this.model.mod.getDisplayName() : 'A moderator';
             return __('%1$s has removed this message', modname);
@@ -220,19 +232,22 @@ export default class Message extends CustomElement {
         }
     }
 
-    renderRetraction () {
+    renderRetraction() {
         const retraction_text = this.isRetracted() ? this.getRetractionText() : null;
         return html`
             <div>${retraction_text}</div>
-            ${ this.model.get('moderation_reason') ?
-                    html`<q class="chat-msg--retracted__reason">${this.model.get('moderation_reason')}</q>` : '' }
+            ${this.model.get('moderation_reason')
+                ? html`
+                      <q class="chat-msg--retracted__reason">${this.model.get('moderation_reason')}</q>
+                  `
+                : ''}
         `;
     }
 
-    renderMessageText () {
+    renderMessageText() {
         const i18n_edited = __('This message has been edited');
         const i18n_show = __('Show more');
-        const is_groupchat_message = (this.model.get('type') === 'groupchat');
+        const is_groupchat_message = this.model.get('type') === 'groupchat';
         const i18n_show_less = __('Show less');
 
         const tpl_spoiler_hint = html`
@@ -240,31 +255,56 @@ export default class Message extends CustomElement {
                 <span class="spoiler-hint">${this.model.get('spoiler_hint')}</span>
                 <a class="badge badge-info spoiler-toggle" href="#" @click=${this.toggleSpoilerMessage}>
                     <i class="fa ${this.model.get('is_spoiler_visible') ? 'fa-eye-slash' : 'fa-eye'}"></i>
-                    ${ this.model.get('is_spoiler_visible') ? i18n_show_less : i18n_show }
+                    ${this.model.get('is_spoiler_visible') ? i18n_show_less : i18n_show}
                 </a>
             </div>
         `;
-        const spoiler_classes = this.model.get('is_spoiler') ? `spoiler ${this.model.get('is_spoiler_visible') ? '' : 'hidden'}` : '';
+        const spoiler_classes = this.model.get('is_spoiler')
+            ? `spoiler ${this.model.get('is_spoiler_visible') ? '' : 'hidden'}`
+            : '';
         const text = this.model.getMessageText();
         return html`
-            ${ this.model.get('is_spoiler') ? tpl_spoiler_hint : '' }
-            ${ this.model.get('subject') ? html`<div class="chat-msg__subject">${this.model.get('subject')}</div>` : '' }
+            ${this.model.get('is_spoiler') ? tpl_spoiler_hint : ''}
+            ${this.model.get('subject')
+                ? html`
+                      <div class="chat-msg__subject">${this.model.get('subject')}</div>
+                  `
+                : ''}
             <span>
                 <converse-chat-message-body
-                    class="chat-msg__text ${this.model.get('is_only_emojis') ? 'chat-msg__text--larger' : ''} ${spoiler_classes}"
+                    class="chat-msg__text ${this.model.get('is_only_emojis')
+                        ? 'chat-msg__text--larger'
+                        : ''} ${spoiler_classes}"
                     .model="${this.model}"
                     ?is_me_message="${this.model.isMeCommand()}"
                     ?show_images="${api.settings.get('show_images_inline')}"
-                    text="${text}"></converse-chat-message-body>
-                ${ (this.model.get('received') && !this.model.isMeCommand() && !is_groupchat_message) ? html`<span class="fa fa-check chat-msg__receipt"></span>` : '' }
-                ${ (this.model.get('edited')) ? html`<i title="${ i18n_edited }" class="fa fa-edit chat-msg__edit-modal" @click=${this.showMessageVersionsModal}></i>` : '' }
+                    text="${text}"
+                ></converse-chat-message-body>
+                ${this.model.get('received') && !this.model.isMeCommand() && !is_groupchat_message
+                    ? html`
+                          <span class="fa fa-check chat-msg__receipt"></span>
+                      `
+                    : ''}
+                ${this.model.get('edited')
+                    ? html`
+                          <i
+                              title="${i18n_edited}"
+                              class="fa fa-edit chat-msg__edit-modal"
+                              @click=${this.showMessageVersionsModal}
+                          ></i>
+                      `
+                    : ''}
             </span>
-            ${ this.model.get('oob_url') ? html`<div class="chat-msg__media">${u.getOOBURLMarkup(_converse, this.model.get('oob_url'))}</div>` : '' }
-            <div class="chat-msg__error">${ this.model.get('error_text') || this.model.get('error') }</div>
+            ${this.model.get('oob_url')
+                ? html`
+                      <div class="chat-msg__media">${u.getOOBURLMarkup(_converse, this.model.get('oob_url'))}</div>
+                  `
+                : ''}
+            <div class="chat-msg__error">${this.model.get('error_text') || this.model.get('error')}</div>
         `;
     }
 
-    showUserModal (ev) {
+    showUserModal(ev) {
         if (this.model.get('sender') === 'me') {
             _converse.xmppstatusview.showProfileModal(ev);
         } else if (this.model.get('type') === 'groupchat') {
@@ -277,14 +317,14 @@ export default class Message extends CustomElement {
         }
     }
 
-    showMessageVersionsModal (ev) {
+    showMessageVersionsModal(ev) {
         ev.preventDefault();
-        api.modal.show(MessageVersionsModal, {'model': this.model}, ev);
+        api.modal.show(MessageVersionsModal, { 'model': this.model }, ev);
     }
 
-    toggleSpoilerMessage (ev) {
+    toggleSpoilerMessage(ev) {
         ev?.preventDefault();
-        this.model.save({'is_spoiler_visible': !this.model.get('is_spoiler_visible')});
+        this.model.save({ 'is_spoiler_visible': !this.model.get('is_spoiler_visible') });
     }
 }
 

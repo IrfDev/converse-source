@@ -3,19 +3,17 @@ import debounce from 'lodash/debounce';
 import tpl_chatbox_head from './templates/chat-head.js';
 import { ElementView } from '@converse/skeletor/src/element.js';
 import { __ } from 'i18n';
-import { _converse, api } from "@converse/headless/core";
+import { _converse, api } from '@converse/headless/core';
 import { getHeadingDropdownItem, getHeadingStandaloneButton } from 'plugins/chatview/utils.js';
 import { render } from 'lit-html';
 
-
 export default class ChatHeading extends ElementView {
-
-    async render () {
+    async render() {
         const tpl = await this.generateHeadingTemplate();
         render(tpl, this);
     }
 
-    connectedCallback () {
+    connectedCallback() {
         super.connectedCallback();
         this.model = _converse.chatboxes.get(this.getAttribute('jid'));
         this.debouncedRender = debounce(this.render, 100);
@@ -30,12 +28,12 @@ export default class ChatHeading extends ElementView {
         this.render();
     }
 
-    showUserDetailsModal (ev) {
+    showUserDetailsModal(ev) {
         ev.preventDefault();
         api.modal.show(UserDetailsModal, { model: this.model }, ev);
     }
 
-    close () {
+    close() {
         _converse.chatboxviews.get(this.getAttribute('jid'))?.close();
     }
 
@@ -44,7 +42,7 @@ export default class ChatHeading extends ElementView {
      * @async
      * @emits _converse#getHeadingButtons
      */
-    getHeadingButtons () {
+    getHeadingButtons() {
         const buttons = [
             {
                 'a_class': 'show-user-details-modal',
@@ -91,7 +89,7 @@ export default class ChatHeading extends ElementView {
         }
     }
 
-    async generateHeadingTemplate () {
+    async generateHeadingTemplate() {
         const vcard = this.model?.vcard;
         const vcard_json = vcard ? vcard.toJSON() : {};
         const i18n_profile = __("The User's Profile Image");
@@ -100,7 +98,8 @@ export default class ChatHeading extends ElementView {
                 'alt_text': i18n_profile,
                 'extra_classes': '',
                 'height': 40,
-                'width': 40
+                'width': 40,
+                'display_name': this.model.getDisplayName()
             },
             vcard_json
         );
@@ -117,8 +116,6 @@ export default class ChatHeading extends ElementView {
             })
         );
     }
-
-
 }
 
 api.elements.define('converse-chat-heading', ChatHeading);

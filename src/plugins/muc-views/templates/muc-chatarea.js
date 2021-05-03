@@ -3,31 +3,38 @@ import '../sidebar.js';
 import 'shared/chat/chat-content.js';
 import 'shared/chat/help-messages.js';
 import { _converse } from '@converse/headless/core';
-import { html } from "lit-html";
+import { html } from 'lit-html';
 
-export default (o) => html`
-    <div class="chat-area">
-        <div class="chat-content ${ o.show_send_button ? 'chat-content-sendbutton' : '' }" aria-live="polite">
+export default o => html`
+    <div class="chat-area mx-2 rounded">
+        <div class="chat-content ${o.show_send_button ? 'chat-content-sendbutton' : ''}" aria-live="polite">
             <converse-chat-content
                 class="chat-content__messages"
                 jid="${o.jid}"
-                @scroll=${o.markScrolled}></converse-chat-content>
+                @scroll=${o.markScrolled}
+            ></converse-chat-content>
 
-            ${o.show_help_messages ? html`<div class="chat-content__help">
-                    <converse-chat-help
-                        .model=${o.model}
-                        .messages=${o.help_messages}
-                        ?hidden=${!o.show_help_messages}
-                        type="info"
-                        chat_type="${_converse.CHATROOMS_TYPE}"
-                    ></converse-chat-help></div>` : '' }
+            ${o.show_help_messages
+                ? html`
+                      <div class="chat-content__help">
+                          <converse-chat-help
+                              .model=${o.model}
+                              .messages=${o.help_messages}
+                              ?hidden=${!o.show_help_messages}
+                              type="info"
+                              chat_type="${_converse.CHATROOMS_TYPE}"
+                          ></converse-chat-help>
+                      </div>
+                  `
+                : ''}
         </div>
         <converse-muc-bottom-panel jid="${o.jid}" class="bottom-panel"></converse-muc-bottom-panel>
     </div>
     <div class="disconnect-container hidden"></div>
     <converse-muc-sidebar
-        class="occupants col-md-3 col-4 ${o.show_sidebar ? '' : 'hidden' }"
+        class="occupants col-md-3 col-4 ${o.show_sidebar ? '' : 'hidden'}"
         style="flex: 0 0 ${o.occupants_width}px"
         jid=${o.jid}
-        @mousedown=${o.onMousedown}></converse-muc-sidebar>
+        @mousedown=${o.onMousedown}
+    ></converse-muc-sidebar>
 `;

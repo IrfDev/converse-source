@@ -1,33 +1,16 @@
-// Converse.js
-// https://conversejs.org
-//
-// Copyright (c) 2020, the Converse.js contributors
-// Licensed under the Mozilla Public License (MPLv2)
-//
-// Webpack entry file
-//
-// The purpose of this file is to provide an initial temporary public API
-// (window.converse) for **before** the rest of converse.js is loaded so
-// that we can set the __webpack_public_path__ global variable.
-//
-// Once the rest converse.js has been loaded, window.converse will be replaced
-// with the full-fledged public API.
-
 const plugins = {};
 
 const converse = {
     plugins: {
-        add (name, plugin) {
+        add(name, plugin) {
             if (plugins[name] !== undefined) {
-                throw new TypeError(
-                    `Error: plugin with name "${name}" has already been ` + 'registered!'
-                );
+                throw new TypeError(`Error: plugin with name "${name}" has already been ` + 'registered!');
             }
             plugins[name] = plugin;
         }
     },
 
-    initialize (settings={}) {
+    initialize(settings = {}) {
         converse.load(settings).initialize(settings);
     },
 
@@ -53,7 +36,7 @@ const converse = {
      * @example
      * converse.load({assets_path: '/path/to/assets/'});
      */
-    load (settings={}) {
+    load(settings = {}) {
         if (settings.assets_path) {
             __webpack_public_path__ = settings.assets_path; // eslint-disable-line no-undef
         }
@@ -61,7 +44,7 @@ const converse = {
         Object.keys(plugins).forEach(name => converse.plugins.add(name, plugins[name]));
         return converse;
     }
-}
+};
 
 window.converse = converse;
 export default converse;

@@ -6,12 +6,12 @@
     .older-msg {
         time {
             font-weight: bold;
-            color: red !important;
+            color: lightgray;
         }
     }
     .message {
         .show-msg-author-modal {
-            color: red !important;
+            color: gray;
         }
 
         blockquote {
@@ -165,11 +165,11 @@
             .chat-msg__content--me {
                 .chat-msg__body--groupchat {
                     .chat-msg__text {
-                        color: var(--subdued-color);
+                        color: ghostwhite;
                     }
                     &.chat-msg__body--delayed .chat-msg__text,
                     &.chat-msg__body--received .chat-msg__text {
-                        color: var(--message-text-color);
+                        color: ghostwhite;
                     }
                 }
             }
@@ -208,7 +208,7 @@
             }
 
             .chat-msg__text {
-                color: var(--message-text-color);
+                color: ghostwhite;
                 padding: 0;
                 white-space: pre-wrap;
                 word-wrap: break-word;
@@ -327,7 +327,7 @@
                 .chat-msg__time {
                     padding-left: 0.25em;
                     padding-right: 0.25em;
-                    color: red !important;
+                    color: gray;
                 }
             }
             &.chat-msg--action {

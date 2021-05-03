@@ -10,6 +10,7 @@ import '@converse/headless/plugins/muc/index.js';
 import { api, converse } from '@converse/headless/core';
 
 import './styles/fullscreen.scss';
+import 'tailwindcss/tailwind.css';
 import './styles/background.scss';
 
 converse.plugins.add('converse-fullscreen', {

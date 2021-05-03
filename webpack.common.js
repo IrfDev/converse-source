@@ -14,108 +14,116 @@ module.exports = {
         chunkFilename: '[name].js'
     },
     entry: path.resolve(__dirname, 'src/entry.js'),
-    externals: [{
-        "window": "window"
-    }],
+    externals: [
+        {
+            'window': 'window'
+        }
+    ],
     watchOptions: {
         ignored: [/dist/, /spec/, /.*\~/]
     },
     module: {
         rules: [
-        {
-            test: path.resolve(__dirname, "node_modules/xss/dist/xss"),
-            use: "exports-loader?filterXSS,filterCSS"
-        }, {
-            test: /LC_MESSAGES\/converse.po$/,
-            type: "json",
-            use: [
             {
-                loader: 'po-loader',
-                options: {
-                    'format': 'jed',
-                    'domain': 'converse'
-                }
-            }
-            ]
-        }, {
-            test: /webfonts\/.*\.(woff(2)?|ttf|eot|truetype|svg)(\?v=\d+\.\d+\.\d+)?$/,
-            use: [
+                test: path.resolve(__dirname, 'node_modules/xss/dist/xss'),
+                use: 'exports-loader?filterXSS,filterCSS'
+            },
             {
-                loader: 'file-loader',
-                options: {
-                    name: '[name].[ext]',
-                    outputPath: 'webfonts/'
-                }
-            }
-            ]
-        }, {
-            test: /\.scss$/,
-            use: [
-                'style-loader',
-                {
-                    loader: 'css-loader',
-                    options: {
-                        sourceMap: true
+                test: /LC_MESSAGES\/converse.po$/,
+                type: 'json',
+                use: [
+                    {
+                        loader: 'po-loader',
+                        options: {
+                            'format': 'jed',
+                            'domain': 'converse'
+                        }
                     }
-                },
-                'postcss-loader',
-                {
-                    loader: 'sass-loader',
+                ]
+            },
+            {
+                test: /webfonts\/.*\.(woff(2)?|ttf|eot|truetype|svg)(\?v=\d+\.\d+\.\d+)?$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[ext]',
+                            outputPath: 'webfonts/'
+                        }
+                    }
+                ]
+            },
+            {
+                test: /\.(s[ac]ss|css)$/i,
+                use: [
+                    'style-loader',
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: true
+                        }
+                    },
+                    'postcss-loader',
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sassOptions: {
+                                includePaths: [
+                                    path.resolve(__dirname, 'node_modules/'),
+                                    path.resolve(__dirname, 'src/')
+                                ]
+                            },
+                            sourceMap: true
+                        }
+                    }
+                ]
+            },
+            {
+                test: /\.js$/,
+                include: /src/,
+                use: {
+                    loader: 'babel-loader',
                     options: {
-                        sassOptions: {
-                            includePaths: [
-                                path.resolve(__dirname, 'node_modules/'),
-                                path.resolve(__dirname, 'src/')
+                        presets: [
+                            [
+                                '@babel/preset-env',
+                                {
+                                    'targets': {
+                                        'browsers': ['>1%', 'not ie 11', 'not op_mini all', 'not dead']
+                                    }
+                                }
                             ]
-                        },
-                        sourceMap: true
+                        ],
+                        plugins: [
+                            'lodash',
+                            '@babel/plugin-proposal-class-properties',
+                            '@babel/plugin-proposal-nullish-coalescing-operator',
+                            '@babel/plugin-proposal-optional-chaining',
+                            '@babel/plugin-syntax-dynamic-import'
+                        ]
                     }
                 }
-            ]
-        }, {
-            test: /\.js$/,
-            include: /src/,
-            use: {
-                loader: 'babel-loader',
-                options: {
-                    presets: [
-                        ["@babel/preset-env", {
-                            "targets": {
-                                "browsers": [">1%", "not ie 11", "not op_mini all", "not dead"]
-                            }
-                        }]
-                    ],
-                    plugins: [
-                        'lodash',
-                        '@babel/plugin-proposal-class-properties',
-                        '@babel/plugin-proposal-nullish-coalescing-operator',
-                        '@babel/plugin-proposal-optional-chaining',
-                        '@babel/plugin-syntax-dynamic-import'
-                    ]
+            },
+            {
+                test: /bootstrap\.native/,
+                use: {
+                    loader: 'bootstrap.native-loader',
+                    options: {
+                        bs_version: 4,
+                        ignore: bootstrap_ignore_modules
+                    }
                 }
             }
-        }, {
-            test: /bootstrap\.native/,
-            use: {
-                loader: 'bootstrap.native-loader',
-                options: {
-                    bs_version: 4,
-                    ignore: bootstrap_ignore_modules
-                }
-            }
-        }],
+        ]
     },
     resolve: {
         extensions: ['.js'],
-        modules: [
-            'node_modules',
-            path.resolve(__dirname, "src")
-        ],
+        modules: ['node_modules', path.resolve(__dirname, 'src')],
         alias: {
-            "IPv6":                     path.resolve(__dirname, "node_modules/urijs/src/IPv6"),
-            "SecondLevelDomains":       path.resolve(__dirname, "node_modules/urijs/src/SecondLevelDomains"),
-            "formdata-polyfill":        path.resolve(__dirname, "node_modules/formdata-polyfill/FormData"),
-            "punycode":                 path.resolve(__dirname, "node_modules/urijs/src/punycode")
+            'IPv6': path.resolve(__dirname, 'node_modules/urijs/src/IPv6'),
+            'SecondLevelDomains': path.resolve(__dirname, 'node_modules/urijs/src/SecondLevelDomains'),
+            'formdata-polyfill': path.resolve(__dirname, 'node_modules/formdata-polyfill/FormData'),
+            'punycode': path.resolve(__dirname, 'node_modules/urijs/src/punycode')
         }
     }
-}
+};
