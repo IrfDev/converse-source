@@ -18,7 +18,7 @@ export default o => {
                     width="${o.width}"
                     height="${o.height}"
                     preserveAspectRatio="xMidYMid meet"
-                    href="${getImgHref(o.image, o.image_type, o)}"
+                    href="${getImgHref(o.image, o.image_type)}"
                 />
             </svg>
         `;
