@@ -1,25 +1,23 @@
-import { html } from "lit-html";
+import { html } from 'lit-html';
 import { __ } from 'i18n';
 
-
-const occupant_title = (o) => {
+const occupant_title = o => {
     const i18n_moderator_hint = __('This user is a moderator.');
     const i18n_participant_hint = __('This user can send messages in this groupchat.');
-    const i18n_visitor_hint = __('This user can NOT send messages in this groupchat.')
+    const i18n_visitor_hint = __('This user can NOT send messages in this groupchat.');
     const spaced_jid = `${o.jid} ` || '';
-    if (o.role === "moderator") {
+    if (o.role === 'moderator') {
         return `${spaced_jid}${i18n_moderator_hint} ${o.hint_occupant}`;
-    } else if (o.role === "participant") {
+    } else if (o.role === 'participant') {
         return `${spaced_jid}${i18n_participant_hint} ${o.hint_occupant}`;
-    } else if (o.role === "visitor") {
+    } else if (o.role === 'visitor') {
         return `${spaced_jid}${i18n_visitor_hint} ${o.hint_occupant}`;
-    } else if (!["visitor", "participant", "moderator"].includes(o.role)) {
+    } else if (!['visitor', 'participant', 'moderator'].includes(o.role)) {
         return `${spaced_jid}${o.hint_occupant}`;
     }
-}
+};
 
-
-export default (o) => {
+export default o => {
     const i18n_owner = __('Owner');
     const i18n_admin = __('Admin');
     const i18n_member = __('Member');
@@ -32,16 +30,36 @@ export default (o) => {
                     <div class="occupant-status occupant-${o.show} circle" title="${o.hint_show}"></div>
                 </div>
                 <div class="col occupant-nick-badge">
-                    <span class="occupant-nick" @click=${o.onOccupantClicked}>${o.nick || o.jid}</span>
+                    <span class="occupant-nick rounded w-100" @click=${o.onOccupantClicked}>${o.nick || o.jid}</span>
                     <span class="occupant-badges">
-                        ${ (o.affiliation === "owner") ? html`<span class="badge badge-groupchat">${i18n_owner}</span>` : '' }
-                        ${ (o.affiliation === "admin") ? html`<span class="badge badge-info">${i18n_admin}</span>` : '' }
-                        ${ (o.affiliation === "member") ? html`<span class="badge badge-info">${i18n_member}</span>` : '' }
-                        ${ (o.role === "moderator") ? html`<span class="badge badge-info">${i18n_moderator}</span>` : '' }
-                        ${ (o.role === "visitor") ? html`<span class="badge badge-secondary">${i18n_visitor}</span>`  : '' }
+                        ${o.affiliation === 'owner'
+                            ? html`
+                                  <span class="badge badge-groupchat">${i18n_owner}</span>
+                              `
+                            : ''}
+                        ${o.affiliation === 'admin'
+                            ? html`
+                                  <span class="badge badge-info">${i18n_admin}</span>
+                              `
+                            : ''}
+                        ${o.affiliation === 'member'
+                            ? html`
+                                  <span class="badge badge-info">${i18n_member}</span>
+                              `
+                            : ''}
+                        ${o.role === 'moderator'
+                            ? html`
+                                  <span class="badge badge-info">${i18n_moderator}</span>
+                              `
+                            : ''}
+                        ${o.role === 'visitor'
+                            ? html`
+                                  <span class="badge badge-secondary">${i18n_visitor}</span>
+                              `
+                            : ''}
                     </span>
                 </div>
             </div>
         </li>
     `;
-}
+};

@@ -166,6 +166,12 @@
                 .chat-msg__body--groupchat {
                     .chat-msg__text {
                         color: ghostwhite;
+                        &::selection {
+                            transition: all ease-in 0.4s;
+                            background-color: #b99309;
+                            font-weight: 800;
+                            border-radius: 25px;
+                        }
                     }
                     &.chat-msg__body--delayed .chat-msg__text,
                     &.chat-msg__body--received .chat-msg__text {

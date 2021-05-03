@@ -1,9 +1,8 @@
-@import "bootstrap/scss/functions";
-@import "bootstrap/scss/variables";
-@import "bootstrap/scss/mixins";
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
 
 #conversejs {
-
     .send-button {
         border-radius: 0;
         bottom: var(--send-button-bottom);
@@ -23,8 +22,8 @@
     }
 
     .chat-toolbar {
-
         .toolbar-buttons {
+            background-color: #4444;
             width: 100%;
             display: inline-block;
 
@@ -102,9 +101,12 @@
         margin: 0;
         width: 100%;
 
-        .fa, .fa:hover,
-        .far, .far:hover,
-        .fas, .fas:hover {
+        .fa,
+        .fa:hover,
+        .far,
+        .far:hover,
+        .fas,
+        .fas:hover {
             color: var(--chat-head-color);
             font-size: var(--font-size-large);
             svg {
@@ -140,9 +142,12 @@
             border-top: var(--chatbox-message-input-border-top);
             color: var(--chat-toolbar-btn-color);
             background-color: white;
-            .fas, .fas:hover,
-            .far, .far:hover,
-            .fa, .fa:hover {
+            .fas,
+            .fas:hover,
+            .far,
+            .far:hover,
+            .fa,
+            .fa:hover {
                 color: var(--chat-toolbar-btn-color);
             }
             button {
@@ -154,7 +159,8 @@
                     &:hover {
                         color: var(--chat-toolbar-btn-disabled-color);
                     }
-                    svg, svg:hover {
+                    svg,
+                    svg:hover {
                         fill: var(--chat-toolbar-btn-disabled-color);
                     }
                 }
@@ -166,9 +172,12 @@
         converse-chat-toolbar {
             border-top: var(--chatroom-message-input-border-top);
             color: var(--muc-toolbar-btn-color);
-            .fas, .fas:hover,
-            .far, .far:hover,
-            .fa, .fa:hover {
+            .fas,
+            .fas:hover,
+            .far,
+            .far:hover,
+            .fa,
+            .fa:hover {
                 color: var(--muc-toolbar-btn-color);
                 font-size: var(--font-size-large);
                 svg {
@@ -184,7 +193,8 @@
                     &:hover {
                         color: var(--muc-toolbar-btn-disabled-color);
                     }
-                    svg, svg:hover {
+                    svg,
+                    svg:hover {
                         fill: var(--muc-toolbar-btn-disabled-color);
                     }
                 }
@@ -193,7 +203,7 @@
     }
 
     converse-chats {
-        &.converse-overlayed  {
+        &.converse-overlayed {
             .chat-toolbar {
                 li {
                     .toolbar-menu {

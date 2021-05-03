@@ -1,9 +1,8 @@
-import { html } from "lit-html";
+import { html } from 'lit-html';
 import { __ } from '../../i18n';
-import { modal_header_close_button } from "./buttons.js"
+import { modal_header_close_button } from './buttons.js';
 
-
-export default (o) => {
+export default o => {
     const i18n_contact_placeholder = __('name@example.org');
     const i18n_add = __('Add');
     const i18n_error_message = __('Please enter a valid XMPP address');
@@ -24,21 +23,39 @@ export default (o) => {
                             <label class="clearfix" for="jid">${i18n_xmpp_address}:</label>
                             <div class="suggestion-box suggestion-box__jid">
                                 <ul class="suggestion-box__results suggestion-box__results--above" hidden=""></ul>
-                                <input type="text" name="jid" ?required=${(!o._converse.xhr_user_search_url)}
+                                <input
+                                    type="text"
+                                    name="jid"
+                                    ?required=${!o._converse.xhr_user_search_url}
                                     value="${o.jid || ''}"
                                     class="form-control suggestion-box__input"
-                                    placeholder="${i18n_contact_placeholder}"/>
-                                <span class="suggestion-box__additions visually-hidden" role="status" aria-live="assertive" aria-relevant="additions"></span>
+                                    placeholder="${i18n_contact_placeholder}"
+                                />
+                                <span
+                                    class="suggestion-box__additions visually-hidden"
+                                    role="status"
+                                    aria-live="assertive"
+                                    aria-relevant="additions"
+                                ></span>
                             </div>
                         </div>
                         <div class="form-group add-xmpp-contact__name">
                             <label class="clearfix" for="name">${i18n_nickname}:</label>
                             <div class="suggestion-box suggestion-box__name">
                                 <ul class="suggestion-box__results suggestion-box__results--above" hidden=""></ul>
-                                <input type="text" name="name" value="${o.nickname || ''}"
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value="${o.nickname || ''}"
                                     class="form-control suggestion-box__input"
-                                    placeholder="${i18n_nickname}"/>
-                                <span class="suggestion-box__additions visually-hidden" role="status" aria-live="assertive" aria-relevant="additions"></span>
+                                    placeholder="${i18n_nickname}"
+                                />
+                                <span
+                                    class="suggestion-box__additions visually-hidden"
+                                    role="status"
+                                    aria-live="assertive"
+                                    aria-relevant="additions"
+                                ></span>
                             </div>
                         </div>
                         <div class="form-group">
@@ -50,4 +67,4 @@ export default (o) => {
             </div>
         </div>
     `;
-}
+};

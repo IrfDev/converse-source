@@ -2,20 +2,19 @@ import tpl_chatbox_message_form from './templates/chatbox_message_form.js';
 import tpl_toolbar from './templates/toolbar.js';
 import { ElementView } from '@converse/skeletor/src/element.js';
 import { __ } from 'i18n';
-import { _converse, api, converse } from "@converse/headless/core";
+import { _converse, api, converse } from '@converse/headless/core';
 import { html, render } from 'lit-html';
 import { clearMessages, parseMessageForCommands } from './utils.js';
 
 const { u } = converse.env;
 
 export default class ChatBottomPanel extends ElementView {
-
     events = {
         'click .send-button': 'onFormSubmitted',
-        'click .toggle-clear': 'clearMessages',
-    }
+        'click .toggle-clear': 'clearMessages'
+    };
 
-    async connectedCallback () {
+    async connectedCallback() {
         super.connectedCallback();
         this.model = _converse.chatboxes.get(this.getAttribute('jid'));
         this.listenTo(this.model, 'change:composing_spoiler', this.renderMessageForm);
@@ -25,16 +24,22 @@ export default class ChatBottomPanel extends ElementView {
         api.listen.on('chatBoxScrolledDown', () => this.hideNewMessagesIndicator());
     }
 
-    render () {
-        render(html`<div class="message-form-container"></div>`, this);
+    render() {
+        render(
+            html`
+                <div class="message-form-container"></div>
+            `,
+            this
+        );
         this.renderMessageForm();
     }
 
-    renderToolbar () {
+    renderToolbar() {
         if (!api.settings.get('show_toolbar')) {
             return this;
         }
-        const options = Object.assign({
+        const options = Object.assign(
+            {
                 'model': this.model,
                 'chatview': _converse.chatboxviews.get(this.getAttribute('jid'))
             },
@@ -52,7 +57,7 @@ export default class ChatBottomPanel extends ElementView {
         return this;
     }
 
-    renderMessageForm () {
+    renderMessageForm() {
         const form_container = this.querySelector('.message-form-container');
         render(
             tpl_chatbox_message_form(
@@ -70,7 +75,7 @@ export default class ChatBottomPanel extends ElementView {
                     'show_send_button': api.settings.get('show_send_button'),
                     'show_toolbar': api.settings.get('show_toolbar'),
                     'unread_msgs': __('You have unread messages'),
-                    'viewUnreadMessages': ev => this.viewUnreadMessages(ev),
+                    'viewUnreadMessages': ev => this.viewUnreadMessages(ev)
                 })
             ),
             form_container
@@ -80,17 +85,17 @@ export default class ChatBottomPanel extends ElementView {
         this.renderToolbar();
     }
 
-    viewUnreadMessages (ev) {
+    viewUnreadMessages(ev) {
         ev?.preventDefault?.();
         this.model.save({ 'scrolled': false, 'scrollTop': null });
         _converse.chatboxviews.get(this.getAttribute('jid'))?.scrollDown();
     }
 
-    hideNewMessagesIndicator () {
+    hideNewMessagesIndicator() {
         this.querySelector('.new-msgs-indicator')?.classList.add('hidden');
     }
 
-    onMessageCorrecting (message) {
+    onMessageCorrecting(message) {
         if (message.get('correcting')) {
             this.insertIntoTextArea(u.prefixMentions(message), true, true);
         } else {
@@ -103,19 +108,21 @@ export default class ChatBottomPanel extends ElementView {
         }
     }
 
-    emitFocused (ev) {
+    emitFocused(ev) {
         _converse.chatboxviews.get(this.getAttribute('jid'))?.emitFocused(ev);
     }
 
-    emitBlurred (ev) {
+    emitBlurred(ev) {
         _converse.chatboxviews.get(this.getAttribute('jid'))?.emitBlurred(ev);
     }
 
-    getToolbarOptions () { // eslint-disable-line class-methods-use-this
+    getToolbarOptions() {
+        // eslint-disable-line class-methods-use-this
         return {};
     }
 
-    inputChanged (ev) { // eslint-disable-line class-methods-use-this
+    inputChanged(ev) {
+        // eslint-disable-line class-methods-use-this
         if (ev.target.value) {
             const height = ev.target.scrollHeight + 'px';
             if (ev.target.style.height != height) {
@@ -127,7 +134,7 @@ export default class ChatBottomPanel extends ElementView {
         }
     }
 
-    onDrop (evt) {
+    onDrop(evt) {
         if (evt.dataTransfer.files.length == 0) {
             // There are no files to be dropped, so this isn’t a file
             // transfer operation.
@@ -137,20 +144,21 @@ export default class ChatBottomPanel extends ElementView {
         this.model.sendFiles(evt.dataTransfer.files);
     }
 
-    onDragOver (ev) { // eslint-disable-line class-methods-use-this
+    onDragOver(ev) {
+        // eslint-disable-line class-methods-use-this
         ev.preventDefault();
     }
 
-    clearMessages (ev) {
+    clearMessages(ev) {
         ev?.preventDefault?.();
         clearMessages(this.model);
     }
 
-    parseMessageForCommands (text) {
+    parseMessageForCommands(text) {
         return parseMessageForCommands(this.model, text);
     }
 
-    async onFormSubmitted (ev) {
+    async onFormSubmitted(ev) {
         ev?.preventDefault?.();
 
         const textarea = this.querySelector('.chat-textarea');
@@ -218,7 +226,7 @@ export default class ChatBottomPanel extends ElementView {
      * @param {integer} [position] - The end index of the string to be
      *  replaced with the new value.
      */
-    insertIntoTextArea (value, replace = false, correcting = false, position) {
+    insertIntoTextArea(value, replace = false, correcting = false, position) {
         const textarea = this.querySelector('.chat-textarea');
         if (correcting) {
             u.addClass('correcting', textarea);
@@ -242,11 +250,11 @@ export default class ChatBottomPanel extends ElementView {
         }
         const ev = document.createEvent('HTMLEvents');
         ev.initEvent('change', false, true);
-        textarea.dispatchEvent(ev)
+        textarea.dispatchEvent(ev);
         u.placeCaretAtEnd(textarea);
     }
 
-    onEscapePressed (ev) {
+    onEscapePressed(ev) {
         ev.preventDefault();
         const idx = this.model.messages.findLastIndex('correcting');
         const message = idx >= 0 ? this.model.messages.at(idx) : null;
@@ -256,7 +264,7 @@ export default class ChatBottomPanel extends ElementView {
         this.insertIntoTextArea('', true, false);
     }
 
-    autocompleteInPicker (input, value) {
+    autocompleteInPicker(input, value) {
         const emoji_dropdown = this.querySelector('converse-emoji-dropdown');
         const emoji_picker = this.querySelector('converse-emoji-picker');
         if (emoji_picker && emoji_dropdown) {
@@ -270,7 +278,7 @@ export default class ChatBottomPanel extends ElementView {
         }
     }
 
-    onKeyDown (ev) {
+    onKeyDown(ev) {
         if (ev.ctrlKey) {
             // When ctrl is pressed, no chars are entered into the textarea.
             return;
@@ -320,7 +328,7 @@ export default class ChatBottomPanel extends ElementView {
         }
     }
 
-    updateCharCounter (chars) {
+    updateCharCounter(chars) {
         if (api.settings.get('message_limit')) {
             const message_limit = this.querySelector('.message-limit');
             const counter = api.settings.get('message_limit') - chars.length;
@@ -333,11 +341,11 @@ export default class ChatBottomPanel extends ElementView {
         }
     }
 
-    onKeyUp (ev) {
+    onKeyUp(ev) {
         this.updateCharCounter(ev.target.value);
     }
 
-    onPaste (ev) {
+    onPaste(ev) {
         ev.stopPropagation();
         if (ev.clipboardData.files.length !== 0) {
             ev.preventDefault();

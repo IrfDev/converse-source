@@ -5,7 +5,7 @@ import { api } from '@converse/headless/core';
 import { html } from 'lit-element';
 
 export default class AutoCompleteComponent extends CustomElement {
-    static get properties () {
+    static get properties() {
         return {
             'getAutoCompleteList': { type: Function },
             'auto_evaluate': { type: Boolean },
@@ -19,7 +19,7 @@ export default class AutoCompleteComponent extends CustomElement {
         };
     }
 
-    constructor () {
+    constructor() {
         super();
         this.auto_evaluate = true; // Should evaluation happen automatically without any particular key as trigger?
         this.auto_first = false; // Should the first element be automatically selected?
@@ -31,9 +31,9 @@ export default class AutoCompleteComponent extends CustomElement {
         this.triggers = ''; // String of space separated chars
     }
 
-    render () {
+    render() {
         return html`
-            <div class="suggestion-box suggestion-box__name">
+            <div class="suggestion-box p-2 rounded-pill suggestion-box__name">
                 <ul class="suggestion-box__results suggestion-box__results--above" hidden=""></ul>
                 <input
                     type="text"
@@ -54,7 +54,7 @@ export default class AutoCompleteComponent extends CustomElement {
         `;
     }
 
-    firstUpdated () {
+    firstUpdated() {
         this.auto_complete = new AutoComplete(this.firstElementChild, {
             'ac_triggers': this.triggers.split(' '),
             'auto_evaluate': this.auto_evaluate,
@@ -66,17 +66,14 @@ export default class AutoCompleteComponent extends CustomElement {
             'max_items': this.max_items,
             'min_chars': this.min_chars
         });
-        this.auto_complete.on(
-            'suggestion-box-selectcomplete',
-            () => (this.auto_completing = false)
-        );
+        this.auto_complete.on('suggestion-box-selectcomplete', () => (this.auto_completing = false));
     }
 
-    onKeyDown (ev) {
+    onKeyDown(ev) {
         this.auto_complete.onKeyDown(ev);
     }
 
-    onKeyUp (ev) {
+    onKeyUp(ev) {
         this.auto_complete.evaluate(ev);
     }
 }

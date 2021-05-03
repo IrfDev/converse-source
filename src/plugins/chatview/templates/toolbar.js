@@ -1,8 +1,8 @@
 import 'shared/chat/toolbar.js';
 import { api } from '@converse/headless/core.js';
-import { html } from "lit-html";
+import { html } from 'lit-html';
 
-export default (o) => {
+export default o => {
     const message_limit = api.settings.get('message_limit');
     const show_call_button = api.settings.get('visible_toolbar_buttons').call;
     const show_emoji_button = api.settings.get('visible_toolbar_buttons').emoji;
@@ -25,4 +25,4 @@ export default (o) => {
             message_limit="${message_limit}"
         ></converse-chat-toolbar>
     `;
-}
+};

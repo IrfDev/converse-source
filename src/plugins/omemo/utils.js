@@ -14,7 +14,7 @@ const KEY_ALGO = {
 };
 
 export const omemo = {
-    async encryptMessage (plaintext) {
+    async encryptMessage(plaintext) {
         // The client MUST use fresh, randomly generated key/IV pairs
         // with AES-128 in Galois/Counter Mode (GCM).
 
@@ -47,7 +47,7 @@ export const omemo = {
         };
     },
 
-    async decryptMessage (obj) {
+    async decryptMessage(obj) {
         const key_obj = await crypto.subtle.importKey('raw', obj.key, KEY_ALGO, true, ['encrypt', 'decrypt']);
         const cipher = u.appendArrayBuffer(u.base64ToArrayBuffer(obj.payload), obj.tag);
         const algo = {
@@ -57,9 +57,9 @@ export const omemo = {
         };
         return u.arrayBufferToString(await crypto.subtle.decrypt(algo, key_obj, cipher));
     }
-}
+};
 
-export function parseEncryptedMessage (stanza, attrs) {
+export function parseEncryptedMessage(stanza, attrs) {
     if (attrs.is_encrypted && attrs.encrypted.key) {
         // https://xmpp.org/extensions/xep-0384.html#usecases-receiving
         if (attrs.encrypted.prekey === true) {
@@ -72,7 +72,7 @@ export function parseEncryptedMessage (stanza, attrs) {
     }
 }
 
-export function onChatBoxesInitialized () {
+export function onChatBoxesInitialized() {
     _converse.chatboxes.on('add', chatbox => {
         checkOMEMOSupported(chatbox);
         if (chatbox.get('type') === _converse.CHATROOMS_TYPE) {
@@ -82,7 +82,7 @@ export function onChatBoxesInitialized () {
     });
 }
 
-export function onChatInitialized (el) {
+export function onChatInitialized(el) {
     el.listenTo(el.model.messages, 'add', message => {
         if (message.get('is_encrypted') && !message.get('is_error')) {
             el.model.save('omemo_supported', true);
@@ -102,12 +102,12 @@ export function onChatInitialized (el) {
     });
 }
 
-export function getSessionCipher (jid, id) {
+export function getSessionCipher(jid, id) {
     const address = new libsignal.SignalProtocolAddress(jid, id);
     return new window.libsignal.SessionCipher(_converse.omemo_store, address);
 }
 
-async function handleDecryptedWhisperMessage (attrs, key_and_tag) {
+async function handleDecryptedWhisperMessage(attrs, key_and_tag) {
     const encrypted = attrs.encrypted;
     const devicelist = _converse.devicelists.getDeviceList(attrs.from);
     await devicelist._devices_promise;
@@ -125,7 +125,7 @@ async function handleDecryptedWhisperMessage (attrs, key_and_tag) {
     }
 }
 
-function getDecryptionErrorAttributes (e) {
+function getDecryptionErrorAttributes(e) {
     if (api.settings.get('loglevel') === 'debug') {
         return {
             'error_text':
@@ -140,7 +140,7 @@ function getDecryptionErrorAttributes (e) {
     }
 }
 
-async function decryptPrekeyWhisperMessage (attrs) {
+async function decryptPrekeyWhisperMessage(attrs) {
     const session_cipher = getSessionCipher(attrs.from, parseInt(attrs.encrypted.device_id, 10));
     const key = u.base64ToArrayBuffer(attrs.encrypted.key);
     let key_and_tag;
@@ -187,7 +187,7 @@ async function decryptPrekeyWhisperMessage (attrs) {
     }
 }
 
-async function decryptWhisperMessage (attrs) {
+async function decryptWhisperMessage(attrs) {
     const from_jid = attrs.from_muc ? attrs.from_real_jid : attrs.from;
     if (!from_jid) {
         Object.assign(attrs, {
@@ -210,7 +210,7 @@ async function decryptWhisperMessage (attrs) {
     }
 }
 
-export function addKeysToMessageStanza (stanza, dicts, iv) {
+export function addKeysToMessageStanza(stanza, dicts, iv) {
     for (const i in dicts) {
         if (Object.prototype.hasOwnProperty.call(dicts, i)) {
             const payload = dicts[i].payload;
@@ -238,7 +238,7 @@ export function addKeysToMessageStanza (stanza, dicts, iv) {
  * Given an XML element representing a user's OMEMO bundle, parse it
  * and return a map.
  */
-export function parseBundle (bundle_el) {
+export function parseBundle(bundle_el) {
     const signed_prekey_public_el = bundle_el.querySelector('signedPreKeyPublic');
     const signed_prekey_signature_el = bundle_el.querySelector('signedPreKeySignature');
     const prekeys = sizzle(`prekeys > preKeyPublic`, bundle_el).map(el => ({
@@ -256,7 +256,7 @@ export function parseBundle (bundle_el) {
     };
 }
 
-export async function generateFingerprint (device) {
+export async function generateFingerprint(device) {
     if (device.get('bundle')?.fingerprint) {
         return;
     }
@@ -266,14 +266,14 @@ export async function generateFingerprint (device) {
     device.trigger('change:bundle'); // Doesn't get triggered automatically due to pass-by-reference
 }
 
-export async function getDevicesForContact (jid) {
+export async function getDevicesForContact(jid) {
     await api.waitUntil('OMEMOInitialized');
     const devicelist = _converse.devicelists.get(jid) || _converse.devicelists.create({ 'jid': jid });
     await devicelist.fetchDevices();
     return devicelist.devices;
 }
 
-export function generateDeviceID () {
+export function generateDeviceID() {
     /* Generates a device ID, making sure that it's unique */
     const existing_ids = _converse.devicelists.get(_converse.bare_jid).devices.pluck('id');
     let device_id = libsignal.KeyHelper.generateRegistrationId();
@@ -291,7 +291,7 @@ export function generateDeviceID () {
     return device_id.toString();
 }
 
-async function buildSession (device) {
+async function buildSession(device) {
     // TODO: check device-get('jid') versus the 'from' attribute which is used
     // to build a session when receiving an encrypted message in a MUC.
     // https://github.com/conversejs/converse.js/issues/1481#issuecomment-509183431
@@ -315,7 +315,7 @@ async function buildSession (device) {
     });
 }
 
-export async function getSession (device) {
+export async function getSession(device) {
     if (!device.get('bundle')) {
         log.error(`Could not build an OMEMO session for device ${device.get('id')} because we don't have its bundle`);
         return null;
@@ -336,7 +336,7 @@ export async function getSession (device) {
     }
 }
 
-function updateBundleFromStanza (stanza) {
+function updateBundleFromStanza(stanza) {
     const items_el = sizzle(`items`, stanza).pop();
     if (!items_el || !items_el.getAttribute('node').startsWith(Strophe.NS.OMEMO_BUNDLES)) {
         return;
@@ -349,7 +349,7 @@ function updateBundleFromStanza (stanza) {
     device.save({ 'bundle': parseBundle(bundle_el) });
 }
 
-function updateDevicesFromStanza (stanza) {
+function updateDevicesFromStanza(stanza) {
     const items_el = sizzle(`items[node="${Strophe.NS.OMEMO_DEVICELIST}"]`, stanza).pop();
     if (!items_el) {
         return;
@@ -382,7 +382,7 @@ function updateDevicesFromStanza (stanza) {
     }
 }
 
-export function registerPEPPushHandler () {
+export function registerPEPPushHandler() {
     // Add a handler for devices pushed from other connected clients
     _converse.connection.addHandler(
         message => {
@@ -402,7 +402,7 @@ export function registerPEPPushHandler () {
     );
 }
 
-export function restoreOMEMOSession () {
+export function restoreOMEMOSession() {
     if (_converse.omemo_store === undefined) {
         const id = `converse.omemosession-${_converse.bare_jid}`;
         _converse.omemo_store = new _converse.OMEMOStore({ 'id': id });
@@ -411,11 +411,11 @@ export function restoreOMEMOSession () {
     return _converse.omemo_store.fetchSession();
 }
 
-function fetchDeviceLists () {
+function fetchDeviceLists() {
     return new Promise((success, error) => _converse.devicelists.fetch({ success, 'error': (m, e) => error(e) }));
 }
 
-async function fetchOwnDevices () {
+async function fetchOwnDevices() {
     await fetchDeviceLists();
     let own_devicelist = _converse.devicelists.get(_converse.bare_jid);
     if (own_devicelist) {
@@ -426,7 +426,7 @@ async function fetchOwnDevices () {
     return own_devicelist._devices_promise;
 }
 
-export async function initOMEMO () {
+export async function initOMEMO() {
     if (!_converse.config.get('trusted') || api.settings.get('clear_cache_on_logout')) {
         log.warn('Not initializing OMEMO, since this browser is not trusted or clear_cache_on_logout is set to true');
         return;
@@ -451,7 +451,7 @@ export async function initOMEMO () {
     api.trigger('OMEMOInitialized');
 }
 
-async function onOccupantAdded (chatroom, occupant) {
+async function onOccupantAdded(chatroom, occupant) {
     if (occupant.isSelf() || !chatroom.features.get('nonanonymous') || !chatroom.features.get('membersonly')) {
         return;
     }
@@ -471,7 +471,7 @@ async function onOccupantAdded (chatroom, occupant) {
     }
 }
 
-async function checkOMEMOSupported (chatbox) {
+async function checkOMEMOSupported(chatbox) {
     let supported;
     if (chatbox.get('type') === _converse.CHATROOMS_TYPE) {
         await api.waitUntil('OMEMOInitialized');
@@ -485,7 +485,7 @@ async function checkOMEMOSupported (chatbox) {
     }
 }
 
-function toggleOMEMO (ev) {
+function toggleOMEMO(ev) {
     ev.stopPropagation();
     ev.preventDefault();
     const toolbar_el = u.ancestor(ev.target, 'converse-chat-toolbar');
@@ -511,7 +511,7 @@ function toggleOMEMO (ev) {
     toolbar_el.model.save({ 'omemo_active': !toolbar_el.model.get('omemo_active') });
 }
 
-export function getOMEMOToolbarButton (toolbar_el, buttons) {
+export function getOMEMOToolbarButton(toolbar_el, buttons) {
     const model = toolbar_el.model;
     const is_muc = model.get('type') === _converse.CHATROOMS_TYPE;
     let title;
@@ -526,15 +526,6 @@ export function getOMEMOToolbarButton (toolbar_el, buttons) {
         );
     }
 
-    buttons.push(html`
-        <button class="toggle-omemo" title="${title}" ?disabled=${!model.get('omemo_supported')} @click=${toggleOMEMO}>
-            <converse-icon
-                class="fa ${model.get('omemo_active') ? `fa-lock` : `fa-unlock`}"
-                path-prefix="${api.settings.get('assets_path')}"
-                size="1em"
-                color="${model.get('omemo_active') ? `var(--info-color)` : `var(--error-color)`}"
-            ></converse-icon>
-        </button>
-    `);
+    buttons.push(html``);
     return buttons;
 }

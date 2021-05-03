@@ -33,7 +33,7 @@ export default o => {
                         : o.display_name}
                 </div>
             </div>
-            <div class="chatbox-title__buttons row no-gutters">
+            <div class="chatbox-title__buttons rounded row no-gutters">
                 ${o.dropdown_btns.length
                     ? html`
                           <converse-dropdown .items=${o.dropdown_btns}></converse-dropdown>

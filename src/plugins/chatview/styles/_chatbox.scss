@@ -325,9 +325,13 @@
         .sendXMPPMessage {
             -moz-background-clip: padding;
             -webkit-background-clip: padding-box;
-            border-bottom-radius: var(--chatbox-border-radius);
+            border-bottom: var(--chatbox-border-radius);
             background-clip: padding-box;
-            background-color: white;
+            background-color: #444444;
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: space-around;
+            align-items: center;
             border: 0;
             margin: 0;
             padding: 0;
@@ -360,8 +364,8 @@
             }
 
             .chat-textarea {
-                color: var(--chat-textarea-color);
-                background-color: var(--chat-textarea-background-color);
+                color: ghostwhite;
+                background-color: #282828;
                 border-top-left-radius: 0;
                 border-top-right-radius: 0;
                 border-bottom-radius: var(--chatbox-border-radius);
