@@ -25,10 +25,15 @@ export default o => html`
                 @keyup=${o.onKeyUp}
                 @paste=${o.onPaste}
                 @change=${o.onChange}
-                class="chat-textarea rounded-pill p-2 suggestion-box__input
+                class="chat-textarea rounded-pill suggestion-box__input
                     ${o.show_send_button ? 'chat-textarea-send-button' : ''}
                     ${o.composing_spoile ? 'spoiler' : ''}"
                 placeholder="${o.label_message}"
+                style="
+                  height: 60px;
+                  padding: 1.2rem 01em;
+                  max-height: 60px;
+                "
             >
 ${o.message_value || ''}</textarea
             >

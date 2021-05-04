@@ -454,6 +454,7 @@
 
                 #converse-register,
                 #converse-login {
+                    border-radius: 25px;
                     @include make-col(12);
                     padding-bottom: 0;
                 }
@@ -519,8 +520,8 @@
                     margin-top: 5em;
                     margin-bottom: 1em;
                     .brand-heading {
+                        font-family: Helvetica;
                         width: 100%;
-                        font-size: 500%;
                         padding: 0.7em 0 0 0;
                         opacity: 0.8;
                         color: var(--brand-heading-color);
@@ -557,6 +558,7 @@
 
                 #converse-register,
                 #converse-login {
+                    border-radius: 10px;
                     @include make-col-ready();
                     @include make-col(8);
                     @include make-col-offset(2);

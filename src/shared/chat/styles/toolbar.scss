@@ -94,7 +94,7 @@
     }
 
     converse-chat-toolbar {
-        background-color: white;
+        background-color: transparent;
         box-sizing: border-box;
         display: flex;
         justify-content: space-between;
@@ -139,9 +139,8 @@
 
     .chatbox {
         converse-chat-toolbar {
-            border-top: var(--chatbox-message-input-border-top);
             color: var(--chat-toolbar-btn-color);
-            background-color: white;
+            background-color: transparent;
             .fas,
             .fas:hover,
             .far,

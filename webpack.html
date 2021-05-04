@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Converse.js</title>
+        <title>Converse</title>
         <meta charset="utf-8" />
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content="Converse.js: A free chat client for your website" />
+        <meta name="description" content="Hotelier web chat" />
         <script src="3rdparty/libsignal-protocol.js"></script>
         <link rel="manifest" href="./manifest.json" />
         <link rel="shortcut icon" type="image/ico" href="favicon.ico" />
@@ -22,7 +22,7 @@
         converse.initialize({
             muc_subscribe_to_rai: true,
             theme: 'concord',
-            show_send_button: true,
+            show_send_button: false,
             auto_away: 300,
             message_limit: 300,
             auto_register_muc_nickname: true,
@@ -39,7 +39,14 @@
             // bosh_service_url: 'http://chat.example.org:5280/http-bind',
             muc_show_logs_before_join: true,
             whitelisted_plugins: ['converse-debug', 'converse-batched-probe'],
-            auto_login: true,
+            //auto_login: true,
+            visible_toolbar_buttons: {
+                call: false,
+                spoiler: true,
+                emoji: true,
+                toggle_occupants: false,
+                send: false
+            },
             authentication: 'login',
             bosh_service_url: 'https://devchat.staytus.com/',
             jid: 'irving@devchat.staytus.com',

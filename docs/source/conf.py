@@ -274,7 +274,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'Conversejs', u'Converse Documentation',
-   u'JC Brand', 'Converse', 'Open Source XMPP webchat',
+   u'JC Brand', 'Converse', 'webchat',
    'Miscellaneous'),
 ]
 
